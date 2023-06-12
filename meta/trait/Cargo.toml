@@ -1,0 +1,11 @@
+[package]
+name = "meta-trait"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+diesel = { version = "2.1.0", features = [
+    "postgres",
+    "uuid",
+    "chrono",
+] }

@@ -1,0 +1,24 @@
+[package]
+name = "rust-backend"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+diesel = { version = "2.1.0", features = ["postgres", "chrono"] }
+diesel_migrations = "2.1.0"
+serde = { version = "1.0.164", features = ["derive"] }
+serde_json = "1.0.96"
+dotenvy = "0.15.7"
+log = "0.4.19"
+lazy_static = "1.4.0"
+config = "0.13.3"
+deadpool-diesel = { version = "0.4.1", features = ["serde", "postgres"] }
+actix-web = "4.3.1"
+derive_more = "0.99.17"
+chrono = { version = "0.4.26", features = ["serde"] }
+meta = { path = "./meta" }
+
+[features]
+default = ["diesel_migrations"]
+diesel_migrations = []
