@@ -6,7 +6,11 @@ use rust_backend::{api, Config};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-  dotenvy::dotenv().expect("Could not load '.env' file.");
+  match dotenvy::dotenv() {
+    Ok(path) => log::info!("Loaded .env from {:?}", path),
+    Err(err) => log::error!("Error loading .env {:?}", err)
+  };
+
   let config = Config::from_env().expect("Could not load config file from environment.");
   let database: Database<PgConnection, Pg> =
     Database::<PgConnection, Pg>::new(&config.database_url, Runtime::Tokio1);
