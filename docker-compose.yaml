@@ -1,13 +1,24 @@
 version: "3.9"
 services:
+  backend:
+    container_name: rust-backend
+    build:
+      context: .
+      args:
+        - ARCH=x86_64
+    ports:
+      - 127.0.0.1:8080:8080
+    env_file:
+      - .env
+    networks:
+      - rust-bridge
+    depends_on:
+      database:
+        condition: service_healthy
   database:
     container_name: rust-database
     image: postgres:15-alpine
     restart: unless-stopped
-    expose:
-      - 5432
-    ports:
-      - 5432:5432
     volumes:
       - ./pg-data:/var/lib/postgresql/data
     env_file:
