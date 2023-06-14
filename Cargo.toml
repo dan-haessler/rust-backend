@@ -22,3 +22,7 @@ meta = { path = "./meta" }
 [features]
 default = ["diesel_migrations"]
 diesel_migrations = []
+
+[dev-dependencies]
+actix-http = "3.3.1"
+actix-service = "2.0.2"
