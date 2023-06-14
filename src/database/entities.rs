@@ -1,11 +1,13 @@
+use super::schema::*;
 use chrono::NaiveDateTime;
 use diesel;
 use diesel::prelude::*;
+use meta::{GetAll, GetById};
 use serde::{Deserialize, Serialize};
-use meta::{GetById, GetAll};
-use super::schema::*;
 
-#[derive(GetById, GetAll, Identifiable, Selectable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
+#[derive(
+  GetById, GetAll, Identifiable, Selectable, Queryable, Serialize, Deserialize, Debug, PartialEq,
+)]
 #[diesel(table_name = authors)]
 #[meta::backend(connection = PgConnection)]
 pub struct Author {
@@ -15,7 +17,9 @@ pub struct Author {
   pub created: NaiveDateTime,
 }
 
-#[derive(GetById, GetAll, Identifiable, Selectable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
+#[derive(
+  GetById, GetAll, Identifiable, Selectable, Queryable, Serialize, Deserialize, Debug, PartialEq,
+)]
 #[diesel(table_name = books)]
 #[meta::backend(connection = PgConnection)]
 pub struct Book {
@@ -24,7 +28,18 @@ pub struct Book {
   pub description: Option<String>,
 }
 
-#[derive(GetById, GetAll, Identifiable, Selectable, Queryable, Associations, Serialize, Deserialize, Debug, PartialEq)]
+#[derive(
+  GetById,
+  GetAll,
+  Identifiable,
+  Selectable,
+  Queryable,
+  Associations,
+  Serialize,
+  Deserialize,
+  Debug,
+  PartialEq,
+)]
 #[diesel(belongs_to(Book))]
 #[diesel(belongs_to(Author))]
 #[diesel(table_name = authors_of_books)]

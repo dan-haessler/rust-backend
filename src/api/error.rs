@@ -13,7 +13,10 @@ pub struct ApiError {
 
 impl ApiError {
   pub fn new(status_code: u16, message: String) -> ApiError {
-    ApiError { status_code, message }
+    ApiError {
+      status_code,
+      message,
+    }
   }
 }
 

@@ -5,7 +5,7 @@ use std::marker::PhantomData;
 
 use deadpool_diesel::{InteractError, Manager, Pool, Runtime};
 use diesel::{backend::Backend, Connection};
-use diesel::{PgConnection, pg::Pg};
+use diesel::{pg::Pg, PgConnection};
 
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 
@@ -49,7 +49,10 @@ where
       .await
   }
 
-  pub async fn run_pending_migrations(&self, migrations: EmbeddedMigrations) -> Result<(), InteractError> {
+  pub async fn run_pending_migrations(
+    &self,
+    migrations: EmbeddedMigrations,
+  ) -> Result<(), InteractError> {
     self
       .interact(
         |conn| match MigrationHarness::<B>::run_pending_migrations(conn, migrations) {
@@ -81,7 +84,7 @@ macro_rules! impl_get_by_id {
   ($table:ident,$m:ident,$pool:ident,$id:ident) => {{
     use diesel::QueryDsl;
     use diesel::RunQueryDsl;
-    
+
     let conn = $pool.get()?;
     let res = $table::table
       .find($id)
