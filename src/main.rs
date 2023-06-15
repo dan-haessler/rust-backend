@@ -1,23 +1,23 @@
 use actix_web::{middleware::Logger, web, App, HttpServer};
-use deadpool_diesel::{InteractError, Runtime};
+use deadpool_diesel::{Runtime};
 use diesel::{pg::Pg, PgConnection};
 use rust_backend::database::{Database, MIGRATIONS};
 use rust_backend::{api, Config};
+use simple_logger::SimpleLogger;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+  SimpleLogger::new().init().unwrap();
+
   match dotenvy::dotenv() {
     Ok(path) => log::info!("Loaded .env from {:?}", path),
-    Err(err) => log::error!("Error loading .env {:?}", err)
+    Err(err) => log::error!("Error loading .env {:?}", err),
   };
-
   let config = Config::from_env().expect("Could not load config file from environment.");
   let database: Database<PgConnection, Pg> =
-    Database::<PgConnection, Pg>::new(&config.database_url, Runtime::Tokio1);
-  let migration_result: Result<(), InteractError> =
-    database.run_pending_migrations(MIGRATIONS).await;
+    Database::<PgConnection, Pg>::new(&config, Runtime::Tokio1);
 
-  match migration_result {
+  match database.run_pending_migrations(MIGRATIONS).await {
     Ok(_) => {}
     Err(err) => log::error!("Error executing the migrations: {:?}", err),
   }

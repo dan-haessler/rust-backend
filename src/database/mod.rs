@@ -9,6 +9,8 @@ use diesel::{pg::Pg, PgConnection};
 
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 
+use crate::Config;
+
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
 
 pub struct Database<C, B>
@@ -25,10 +27,10 @@ where
   C: Connection + MigrationHarness<B>,
   B: Backend,
 {
-  pub fn new(url: impl Into<String>, runtime: Runtime) -> Self {
+  pub fn new(config: &Config, runtime: Runtime) -> Self {
     Self {
-      pool: Pool::builder(Manager::<C>::new(&url.into(), runtime))
-        .max_size(8)
+      pool: Pool::builder(Manager::<C>::new(&config.database_url, runtime))
+        .max_size(config.pool_conns)
         .build()
         .expect("Could not create connection pool for database"),
       _marker: PhantomData,

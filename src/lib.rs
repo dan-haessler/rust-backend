@@ -8,6 +8,7 @@ pub mod database;
 pub struct Config {
   pub listen: String,
   pub workers: usize,
+  pub pool_conns: usize,
   pub database_url: String,
 }
 
