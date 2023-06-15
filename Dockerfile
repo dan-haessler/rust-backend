@@ -1,5 +1,7 @@
 FROM rust:1.70.0-buster as builder
 
+ARG BUILDPLATFORM
+
 # Create hello-world rust project
 RUN cargo new --bin rust-backend
 
@@ -29,7 +31,12 @@ RUN apt-get update && apt-get -y install libpq5
 
 FROM gcr.io/distroless/cc
 
-ARG ARCH=x86_64
+ENV DATABASE_URL=some
+ENV LISTEN=[::]:8080
+ENV WORKERS=16
+ENV POOL_CONNS=16
+
+ARG ARCH=${BUILDPLATFORM}
 
 WORKDIR /app
 
